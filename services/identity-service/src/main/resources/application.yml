@@ -10,7 +10,18 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  flyway:
+    enabled: false
 
-jwt:
-  secret: verysecretkeythatisatleast32byteslongforhmac
-  expiration: 86400000 # 1 hour
+#jwt:
+#  secret: verysecretkeythatisatleast32byteslongforhmac
+#  expiration: 86400000 # 1 hour
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always

@@ -36,6 +36,17 @@ services:
     networks:
       - ecom-net
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"  # AMQP port
+      - "15672:15672"  # Management UI port
+    environment:
+      - RABBITMQ_DEFAULT_USER=ecomverse
+      - RABBITMQ_DEFAULT_PASS=ecomverse123
+    networks:
+      - ecom-net
+
   identity-service:
     build:
       context: ./services/identity-service
@@ -59,6 +70,42 @@ services:
       - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
     depends_on:
       - discovery-service
+    networks:
+      - ecom-net
+
+  order-service:
+    build:
+      context: ./services/order-service
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=ecomverse
+      - SPRING_RABBITMQ_PASSWORD=ecomverse123
+    depends_on:
+      - discovery-service
+      - rabbitmq
+    networks:
+      - ecom-net
+
+  inventory-service:
+    build:
+      context: ./services/inventory-service
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=ecomverse
+      - SPRING_RABBITMQ_PASSWORD=ecomverse123
+    depends_on:
+      - discovery-service
+      - rabbitmq
     networks:
       - ecom-net
 
