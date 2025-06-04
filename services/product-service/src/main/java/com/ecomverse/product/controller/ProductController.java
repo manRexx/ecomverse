@@ -4,6 +4,7 @@ import com.ecomverse.product.dto.ProductRequest;
 import com.ecomverse.product.dto.ProductResponse;
 import com.ecomverse.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
